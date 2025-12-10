@@ -9,11 +9,13 @@ com\ejemplo\view\VistaEquipos.class
 com\ejemplo\model\Equipo.class
 com\ejemplo\view\VistaTorneo.class
 com\ejemplo\model\Partido.class
+com\ejemplo\view\VistaPartidos$PenalesResult.class
 com\ejemplo\view\PanelPrincipal.class
 com\ejemplo\view\VistaBase.class
 com\ejemplo\model\Jugador.class
 com\ejemplo\view\VistaPartidos.class
 com\ejemplo\view\DialogosFX.class
 com\ejemplo\view\Main.class
+com\ejemplo\util\GeneradorPDF.class
 com\ejemplo\view\VistaPartidos$1.class
 com\ejemplo\controller\PartidosController.class

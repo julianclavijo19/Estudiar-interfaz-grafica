@@ -69,6 +69,12 @@ public Jugador() {
         this.goles++;
     }
 
+    public void quitarGol() {
+        if (this.goles > 0) {
+            this.goles--;
+        }
+    }
+
     // -----------------------------
     // ⚙️ Equipo
     // -----------------------------

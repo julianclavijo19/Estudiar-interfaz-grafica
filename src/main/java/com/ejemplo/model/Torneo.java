@@ -205,7 +205,7 @@ public class Torneo {
     /**
      * Actualiza las estadísticas de los equipos después de un partido.
      */
-    private void actualizarEstadisticasEquipos(Partido partido, int golesLocal, int golesVisitante) {
+    public void actualizarEstadisticasEquipos(Partido partido, int golesLocal, int golesVisitante) {
         Equipo local = partido.getEquipoLocal();
         Equipo visitante = partido.getEquipoVisitante();
         
@@ -236,6 +236,43 @@ public class Torneo {
             visitante.setPuntos(visitante.getPuntos() + 1);
             local.setEmpatados(local.getEmpatados() + 1);
             visitante.setEmpatados(visitante.getEmpatados() + 1);
+        }
+    }
+    
+    /**
+     * Revierte las estadísticas de los equipos de un partido (para edición de resultados).
+     */
+    public void revertirEstadisticasEquipos(Partido partido, int golesLocal, int golesVisitante) {
+        Equipo local = partido.getEquipoLocal();
+        Equipo visitante = partido.getEquipoVisitante();
+        
+        // Revertir goles
+        local.setGolesFavor(local.getGolesFavor() - golesLocal);
+        local.setGolesContra(local.getGolesContra() - golesVisitante);
+        visitante.setGolesFavor(visitante.getGolesFavor() - golesVisitante);
+        visitante.setGolesContra(visitante.getGolesContra() - golesLocal);
+        
+        // Revertir partidos jugados
+        local.setPartidosJugados(local.getPartidosJugados() - 1);
+        visitante.setPartidosJugados(visitante.getPartidosJugados() - 1);
+        
+        // Revertir puntos y resultados
+        if (golesLocal > golesVisitante) {
+            // Local ganó anteriormente
+            local.setPuntos(local.getPuntos() - 3);
+            local.setGanados(local.getGanados() - 1);
+            visitante.setPerdidos(visitante.getPerdidos() - 1);
+        } else if (golesVisitante > golesLocal) {
+            // Visitante ganó anteriormente
+            visitante.setPuntos(visitante.getPuntos() - 3);
+            visitante.setGanados(visitante.getGanados() - 1);
+            local.setPerdidos(local.getPerdidos() - 1);
+        } else {
+            // Empate anteriormente
+            local.setPuntos(local.getPuntos() - 1);
+            visitante.setPuntos(visitante.getPuntos() - 1);
+            local.setEmpatados(local.getEmpatados() - 1);
+            visitante.setEmpatados(visitante.getEmpatados() - 1);
         }
     }
     

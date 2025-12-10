@@ -161,6 +161,24 @@ public class Partido {
         this.ganadorPorPenales = ganador;
         eventos.add("Definición por penales → Ganador: " + ganador.getNombre());
     }
+    
+    public void setResultadoPenales(Integer penalesLocal, Integer penalesVisitante, Equipo ganador) {
+        // Versión sobrecargada que permite null para limpiar penales
+        this.penalesLocal = penalesLocal;
+        this.penalesVisitante = penalesVisitante;
+        this.ganadorPorPenales = ganador;
+    }
+    
+    /**
+     * Limpia los resultados de penales del partido.
+     * Útil cuando se edita un resultado y ya no hay empate.
+     */
+    public void limpiarPenales() {
+        this.penalesLocal = null;
+        this.penalesVisitante = null;
+        this.ganadorPorPenales = null;
+        eventos.add("🗑️ Resultados de penales eliminados.");
+    }
 
     // -----------------------------
     // ⚽️ Registro de goles y tarjetas
@@ -184,6 +202,32 @@ public void agregarGol(Equipo equipo, Jugador jugador) {
     String clave = jugador.getNombre() + " (" + equipo.getNombre() + ")";
     golesPorJugador.put(clave, golesPorJugador.getOrDefault(clave, 0) + 1);
     eventos.add("⚽ Gol de " + clave);
+}
+
+public void quitarGol(Equipo equipo, Jugador jugador) {
+    if (jugador == null)
+        throw new IllegalArgumentException("El jugador no puede ser nulo.");
+
+    String clave = jugador.getNombre() + " (" + equipo.getNombre() + ")";
+    int golesActuales = golesPorJugador.getOrDefault(clave, 0);
+    
+    if (golesActuales > 0) {
+        // ⭐ MEJORA: Llama al método del Jugador para reducir su cuenta de goles.
+        jugador.quitarGol();
+        
+        if (equipo.equals(equipoLocal) && golesLocal > 0)
+            golesLocal--;
+        else if (equipo.equals(equipoVisitante) && golesVisitante > 0)
+            golesVisitante--;
+        else if (!equipo.equals(equipoLocal) && !equipo.equals(equipoVisitante))
+            throw new IllegalArgumentException("El jugador no pertenece a ninguno de los equipos del partido.");
+
+        golesPorJugador.put(clave, golesActuales - 1);
+        if (golesActuales - 1 == 0) {
+            golesPorJugador.remove(clave);
+        }
+        eventos.add("❌ Gol quitado de " + clave);
+    }
 }
 
     public void agregarTarjeta(Equipo equipo, Jugador jugador, String tipo) {
